@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Invoice Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --accent: #22d3ee;
+            --accent-hover: #0ea5e9;
+            --background-light: #f9fafb;
+            --background-dark: #0f172a;
+            --text-light: #1f2937;
+            --text-dark: #f8fafc;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --error: #dc2626;
+            --error-light: #fecaca;
+            --success: #16a34a;
+            --success-light: #bbf7d0;
+            --border-light: #e5e7eb;
+            --border-dark: #334155;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .theme-blue {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #93c5fd;
+        }
+
+        .theme-purple {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --primary-light: #c4b5fd;
+        }
+
+        .theme-green {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #6ee7b7;
+        }
+
+        .theme-orange {
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --primary-light: #fdba74;
+        }
+
+        .theme-pink {
+            --primary: #ec4899;
+            --primary-dark: #db2777;
+            --primary-light: #f9a8d4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.8s ease-in-out;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .app-title i {
+            font-size: 1.75rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .card {
+            background-color: var(--card-light);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            height: fit-content;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        body.dark .card {
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        body.dark h2 {
+            color: var(--primary-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            padding-left: 2.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--card-light);
+            color: var(--text-light);
+        }
+
+        body.dark input,
+        body.dark select,
+        body.dark textarea {
+            background-color: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #f3f4f6;
+        }
+
+        body.dark thead {
+            background-color: #334155;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        body.dark th,
+        body.dark td {
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-cell {
+            text-align: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .delete-btn:hover {
+            color: #b91c1c;
+            transform: scale(1.2);
+        }
+
+        .total-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f3f4f6;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark .total-section {
+            background-color: #334155;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        body.dark .total-amount {
+            color: var(--primary-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .badge-error {
+            background-color: var(--error-light);
+            color: var(--error);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #6b7280;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--primary);
+        }
+
+        body.dark .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            background-color: var(--success);
+            color: white;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background-color: var(--error);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--card-light);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-50px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        body.dark .modal {
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        body.dark .modal-header {
+            border-color: var(--border-dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--error);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .theme-option {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .theme-option.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+
+        .theme-indigo {
+            background: linear-gradient(45deg, #6366f1, #a5b4fc);
+        }
+
+        .theme-blue {
+            background: linear-gradient(45deg, #3b82f6, #93c5fd);
+        }
+
+        .theme-purple {
+            background: linear-gradient(45deg, #8b5cf6, #c4b5fd);
+        }
+
+        .theme-green {
+            background: linear-gradient(45deg, #10b981, #6ee7b7);
+        }
+
+        .theme-orange {
+            background: linear-gradient(45deg, #f97316, #fdba74);
+        }
+
+        .theme-pink {
+            background: linear-gradient(45deg, #ec4899, #f9a8d4);
+        }
+
+        .setting-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .currency-selector {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            font-size: 1rem;
+            background-color: var(--card-light);
+            color: var(--text-light);
+        }
+
+        body.dark .currency-selector {
+            background-color: var(--card-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .currency-selector:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .total-section {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th,
+            td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .theme-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color: #0F172A;">
+    <header>
+        <div class="app-title">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <h1>Invoice Generator</h1>
+        </div>
+        <div class="header-actions">
+            <button class="settings-btn" onclick="openSettingsModal()">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon dark-icon"></i>
+                <i class="fas fa-sun light-icon" style="display:none;"></i>
+                <span class="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card" style="background-color: #1E293B;">
+            <h2><i class="fas fa-pen-to-square"></i> Invoice Form</h2>
+
+            <div class="form-group">
+                <label for="clientName">Client Name</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="clientName" placeholder="Enter client name" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="itemName">Item Description</label>
+                <div class="input-group">
+                    <i class="fas fa-tag"></i>
+                    <input type="text" id="itemName" placeholder="Enter item description" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <div class="input-group">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="discount">Discount (%)</label>
+                <div class="input-group">
+                    <i class="fas fa-percent"></i>
+                    <input type="number" id="discount" placeholder="0" min="0" max="100" />
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="addItemBtn">
+                <i class="fas fa-plus"></i> Add Item
+            </button>
+        </div>
+
+        <div class="card" style="background-color: #1E293B;">
+            <div class="invoice-header">
+                <h2><i class="fas fa-file-invoice"></i> Invoice Preview</h2>
+                <div class="actions">
+                    <button class="action-btn" onclick="printInvoice()" title="Print Invoice">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button class="action-btn" onclick="saveAsImage()" title="Save as Image">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="invoiceOutput">
+                <!-- Invoice items will be displayed here -->
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-danger" id="clearInvoiceBtn">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="modal-close" onclick="closeSettingsModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Theme Color</label>
+                    <div class="theme-options">
+                        <div class="theme-option theme-indigo active" data-theme="indigo">Indigo</div>
+                        <div class="theme-option theme-blue" data-theme="blue">Blue</div>
+                        <div class="theme-option theme-purple" data-theme="purple">Purple</div>
+                        <div class="theme-option theme-green" data-theme="green">Green</div>
+                        <div class="theme-option theme-orange" data-theme="orange">Orange</div>
+                        <div class="theme-option theme-pink" data-theme="pink">Pink</div>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label for="currencySelector">Currency</label>
+                    <select id="currencySelector" class="currency-selector">
+                        <option value="₹">Indian Rupee (₹)</option>
+                        <option value="$">US Dollar ($)</option>
+                        <option value="€">Euro (€)</option>
+                        <option value="£">British Pound (£)</option>
+                        <option value="¥">Japanese Yen (¥)</option>
+                        <option value="₩">Korean Won (₩)</option>
+                        <option value="₽">Russian Ruble (₽)</option>
+                        <option value="₿">Bitcoin (₿)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <script>
+        // Application state
+        let invoiceData = [];
+        let currencySymbol = '₹';
+        let currentTheme = 'indigo';
+
+        // DOM Elements
+        const addItemBtn = document.getElementById('addItemBtn');
+        const clearInvoiceBtn = document.getElementById('clearInvoiceBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const currencySelector = document.getElementById('currencySelector');
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            updateThemeUI();
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        function updateThemeUI() {
+            const isDark = document.body.classList.contains('dark');
+            const darkIcon = document.querySelector('.dark-icon');
+            const lightIcon = document.querySelector('.light-icon');
+            const themeText = document.querySelector('.theme-text');
+
+            if (isDark) {
+                darkIcon.style.display = 'none';
+                lightIcon.style.display = 'inline';
+                themeText.textContent = 'Light Mode';
+            } else {
+                darkIcon.style.display = 'inline';
+                lightIcon.style.display = 'none';
+                themeText.textContent = 'Dark Mode';
+            }
+        }
+
+        // Load settings from local storage
+        function loadSettings() {
+            // Load theme mode (dark/light)
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                updateThemeUI();
+            }
+
+            // Load theme color
+            const savedThemeColor = localStorage.getItem('themeColor');
+            if (savedThemeColor) {
+                setThemeColor(savedThemeColor);
+                // Update active class in modal
+                themeOptions.forEach(option => {
+                    if (option.dataset.theme === savedThemeColor) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            }
+
+            // Load currency
+            const savedCurrency = localStorage.getItem('currency');
+            if (savedCurrency) {
+                currencySymbol = savedCurrency;
+                // Update select dropdown
+                currencySelector.value = savedCurrency;
+            }
+
+            // Load invoice data
+            const savedInvoiceData = localStorage.getItem('invoiceData');
+            if (savedInvoiceData) {
+                try {
+                    invoiceData = JSON.parse(savedInvoiceData);
+                    renderInvoice();
+                } catch (e) {
+                    console.error("Error loading saved invoice data:", e);
+                    localStorage.removeItem('invoiceData');
+                    invoiceData = [];
+                    renderInvoice();
+                }
+            } else {
+                renderInvoice();
+            }
+        }
+
+        // Set theme color
+        function setThemeColor(theme) {
+            // Remove all theme classes
+            document.body.classList.remove('theme-indigo', 'theme-blue', 'theme-purple', 'theme-green', 'theme-orange', 'theme-pink');
+
+            // Add selected theme class
+            if (theme !== 'indigo') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+
+            currentTheme = theme;
+        }
+
+        // Modal Functions
+        function openSettingsModal() {
+            settingsModal.classList.add('active');
+        }
+
+        function closeSettingsModal() {
+            settingsModal.classList.remove('active');
+        }
+
+        function saveSettings() {
+            // Save theme color
+            localStorage.setItem('themeColor', currentTheme);
+
+            // Save currency
+            currencySymbol = currencySelector.value;
+            localStorage.setItem('currency', currencySymbol);
+
+            closeSettingsModal();
+            renderInvoice(); // Re-render to update currency
+            showToast("Settings saved successfully!");
+        }
+
+        // Invoice functions
+        function addInvoiceItem() {
+            const client = document.getElementById('clientName').value.trim();
+            const item = document.getElementById('itemName').value.trim();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+
+            // Validation
+            if (!client || !item) {
+                showToast("Please enter client name and item description", "error");
+                return;
+            }
+
+            if (isNaN(amount) || amount <= 0) {
+                showToast("Please enter a valid amount", "error");
+                return;
+            }
+
+            const finalAmount = amount - (amount * discount / 100);
+            const id = Date.now(); // Unique ID for each item
+
+            invoiceData.push({ id, client, item, amount, discount, finalAmount });
+            localStorage.setItem('invoiceData', JSON.stringify(invoiceData));
+
+            // Clear form fields except client name
+            document.getElementById('itemName').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('discount').value = '';
+
+            renderInvoice();
+            showToast("Item added successfully!");
+        }
+
+        function deleteInvoiceItem(id) {
+            invoiceData = invoiceData.filter(item => item.id !== id);
+            localStorage.setItem('invoiceData', JSON.stringify(invoiceData));
+            renderInvoice();
+            showToast("Item deleted");
+        }
+
+        function clearInvoice() {
+            if (invoiceData.length === 0) return;
+
+            if (confirm("Are you sure you want to clear all items?")) {
+                invoiceData = [];
+                localStorage.removeItem('invoiceData');
+                renderInvoice();
+                showToast("Invoice cleared");
+            }
+        }
+
+        function renderInvoice() {
+            const output = document.getElementById('invoiceOutput');
+
+            if (invoiceData.length === 0) {
+                output.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>No items added to invoice yet.</p>
+                        <p>Add items using the form on the left.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Discount</th>
+                            <th>Final</th>
+                            <th></th>
+                        </tr>
+                    </thead>`
+        }
+    </script>
+
+
+    <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background gradient -->
+        <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#6c63ff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#4eb3f7;stop-opacity:1" />
+        </linearGradient>
+
+        <!-- Main background -->
+        <rect width="1200" height="700" fill="#f5f5f7" />
+
+        <!-- Header -->
+        <rect width="1200" height="80" fill="url(#headerGradient)" />
+        <text x="200" y="50" font-family="Arial" font-size="28" font-weight="bold" fill="white">📄 Invoice
+            Generator</text>
+
+        <!-- Dark mode button -->
+        <rect x="1170" y="25" width="80" height="30" rx="15" fill="#1e90ff" />
+        <text x="1180" y="45" font-family="Arial" font-size="14" fill="white">🌙 Dark Mode</text>
+
+        <!-- Left panel - Invoice Form -->
+        <rect x="50" y="100" width="550" height="580" rx="5" fill="white" stroke="#e0e0e0" stroke-width="1" />
+        <text x="70" y="140" font-family="Arial" font-size="22" font-weight="bold" fill="#333">📝 Invoice Form</text>
+
+        <!-- Form elements -->
+        <text x="70" y="180" font-family="Arial" font-size="16" fill="#555">Client Name</text>
+        <rect x="70" y="190" width="500" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="90" y="215" font-family="Arial" font-size="14" fill="#333">Acme Corporation</text>
+
+        <text x="70" y="260" font-family="Arial" font-size="16" fill="#555">Item description</text>
+        <rect x="70" y="270" width="500" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="90" y="295" font-family="Arial" font-size="14" fill="#333">Web Development Services</text>
+
+        <text x="70" y="340" font-family="Arial" font-size="16" fill="#555">Amount</text>
+        <rect x="70" y="350" width="500" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="90" y="375" font-family="Arial" font-size="14" fill="#333">₹ 15,000.00</text>
+
+        <text x="70" y="420" font-family="Arial" font-size="16" fill="#555">Issued Date</text>
+        <rect x="70" y="430" width="230" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="90" y="455" font-family="Arial" font-size="14" fill="#333">15-04-2025</text>
+
+        <text x="340" y="420" font-family="Arial" font-size="16" fill="#555">Due Date</text>
+        <rect x="340" y="430" width="230" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="360" y="455" font-family="Arial" font-size="14" fill="#333">30-04-2025</text>
+
+        <!-- Discount checkbox checked -->
+        <rect x="70" y="500" width="20" height="20" rx="3" fill="#6c63ff" stroke="#6c63ff" stroke-width="1" />
+        <text x="75" y="514" font-family="Arial" font-size="14" font-weight="bold" fill="white">✓</text>
+        <text x="100" y="515" font-family="Arial" font-size="16" fill="#555">Do you want to give Discount</text>
+
+        <text x="70" y="560" font-family="Arial" font-size="16" fill="#555">Discount</text>
+        <rect x="70" y="570" width="500" height="40" rx="3" fill="white" stroke="#ccc" stroke-width="1" />
+        <text x="90" y="595" font-family="Arial" font-size="14" fill="#333">10%</text>
+
+        <!-- Add Item Button -->
+        <rect x="70" y="630" width="500" height="40" rx="20" fill="#6c63ff" />
+        <text x="270" y="655" font-family="Arial" font-size="16" font-weight="bold" fill="white">+ Add Item</text>
+
+        <!-- Right panel - Invoice Preview -->
+        <rect x="630" y="100" width="550" height="580" rx="5" fill="white" stroke="#e0e0e0" stroke-width="1" />
+        <text x="650" y="140" font-family="Arial" font-size="22" font-weight="bold" fill="#333">🧾 Invoice
+            Preview</text>
+
+        <!-- Invoice content -->
+        <rect x="650" y="170" width="510" height="480" rx="5" fill="#fafafa" stroke="#e0e0e0" stroke-width="1" />
+
+        <!-- Company info -->
+        <text x="670" y="200" font-family="Arial" font-size="24" font-weight="bold" fill="#333">INVOICE</text>
+        <text x="670" y="230" font-family="Arial" font-size="16" fill="#555">Your Company Name</text>
+        <text x="670" y="250" font-family="Arial" font-size="14" fill="#777">123 Business Street</text>
+        <text x="670" y="270" font-family="Arial" font-size="14" fill="#777">City, State, ZIP</text>
+
+        <text x="970" y="230" font-family="Arial" font-size="16" font-weight="bold" fill="#555">Invoice #:
+            INV-2025-001</text>
+        <text x="970" y="250" font-family="Arial" font-size="14" fill="#777">Issue Date: 15-04-2025</text>
+        <text x="970" y="270" font-family="Arial" font-size="14" fill="#777">Due Date: 30-04-2025</text>
+
+        <!-- Client info -->
+        <text x="670" y="310" font-family="Arial" font-size="16" font-weight="bold" fill="#555">Bill To:</text>
+        <text x="670" y="330" font-family="Arial" font-size="14" fill="#777">Acme Corporation</text>
+
+        <!-- Line -->
+        <line x1="670" y1="360" x2="1140" y2="360" stroke="#ddd" stroke-width="2" />
+
+        <!-- Item details -->
+        <text x="670" y="390" font-family="Arial" font-size="14" font-weight="bold" fill="#555">Description</text>
+        <text x="1050" y="390" font-family="Arial" font-size="14" font-weight="bold" fill="#555">Amount</text>
+
+        <text x="670" y="420" font-family="Arial" font-size="14" fill="#777">Web Development Services</text>
+        <text x="1050" y="420" font-family="Arial" font-size="14" fill="#777">₹ 15,000.00</text>
+
+        <!-- Discount line -->
+        <text x="670" y="450" font-family="Arial" font-size="14" fill="#777">Discount (10%)</text>
+        <text x="1050" y="450" font-family="Arial" font-size="14" fill="#777">- ₹ 1,500.00</text>
+
+        <!-- Line -->
+        <line x1="670" y1="480" x2="1140" y2="480" stroke="#ddd" stroke-width="2" />
+
+        <!-- Total -->
+        <text x="950" y="510" font-family="Arial" font-size="16" font-weight="bold" fill="#555">Total:</text>
+        <text x="1050" y="510" font-family="Arial" font-size="16" font-weight="bold" fill="#555">₹ 13,500.00</text>
+
+        <!-- Thank you note -->
+        <text x="670" y="550" font-family="Arial" font-size="14" fill="#777">Thank you for your business!</text>
+
+        <!-- Footer -->
+        <text x="670" y="600" font-family="Arial" font-size="12" fill="#777">Payment terms: Net 15 days</text>
+        <text x="670" y="620" font-family="Arial" font-size="12" fill="#777">Make all checks payable to Your Company
+            Name</text>
+
+        <!-- Clear All button -->
+        <rect x="650" y="670" width="510" height="40" rx="20" fill="#e74c3c" />
+        <text x="880" y="695" font-family="Arial" font-size="16" font-weight="bold" fill="white">🗑 Clear All</text>
+    </svg>
+
+</body>
+
+</html>

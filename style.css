@@ -1,0 +1,324 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: rgb(249, 250, 251);
+    color: var(--text-light);
+    transition: var(--transition);
+    line-height: 1.6;
+}
+
+/* Navbar */
+#nav {
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+    color: #fff;
+    padding: 25px 0px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+
+    #navBody {
+        display: flex;
+        justify-content: space-between;
+
+        #navLeft {
+            font-size: 33px;
+            font-weight: 600;
+        }
+
+        #navRight {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            #settings {
+                border-radius: 50%;
+                background-color: #6CD5F4;
+                padding: 8px;
+                font-size: 15px;
+                cursor: pointer;
+            }
+
+            #theme {
+                border-radius: 20px;
+                background-color: #6CD5F4;
+                padding: 5px 20px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+
+                #lightTheme {
+                    display: none;
+                }
+
+                #themeName {
+                    font-size: 12px;
+                }
+            }
+
+        }
+    }
+}
+
+/* invoice form and invoice preview  */
+#invoice {
+    margin-top: 140px;
+
+    #invoiceForm {
+        min-height: 100vh;
+        max-height: fit-content;
+        padding: 20px 0px;
+        border-radius: 20px;
+
+        #title {
+            text-align: center;
+            font-size: 25px;
+            color: #6366f1;
+            font-weight: 700;
+        }
+
+        form {
+            margin-top: 30px;
+            padding: 0px 30px;
+
+            label {
+                font-weight: 600;
+            }
+
+            .InputDiv,
+            .DatesDiv {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                border: 1px solid #334155;
+                padding: 5px 10px;
+                border-radius: 8px;
+                color: #6b7280;
+
+                input {
+                    border: none;
+                    width: 100%;
+                }
+
+                input:focus {
+                    border: none !important;
+                    outline: none;
+                }
+
+                #usDollar,
+                #euro {
+                    display: none;
+                }
+
+            }
+
+            .discountsDiv {
+                padding: 5px 10px;
+
+                input {
+                    cursor: pointer;
+                    transform: scale(1.3);
+                }
+
+                label {
+                    cursor: pointer;
+                    font-size: 18px;
+                }
+            }
+
+            #discountAmt {
+                display: none;
+            }
+
+            #addItemBtn {
+                background-color: #6366F1;
+                color: #fff;
+                margin-top: 25px;
+                border-radius: 10px;
+            }
+        }
+
+    }
+
+    #invoicePreview {
+        min-height: 100vh;
+        /* max-height: fit-content; */
+        padding: 10px 30px;
+        border-radius: 20px;
+
+        #title {
+            text-align: center;
+            font-size: 25px;
+            color: #6366f1;
+            font-weight: 700;
+            padding: 10px 10px;
+        }
+
+        #noInvoice {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 20px;
+            /* display: none; */
+        }
+
+        #downloadIcon {
+            cursor: pointer;
+        }
+
+        i {
+            font-weight: 900;
+            font-family: "Font Awesome 6 Pro";
+        }
+
+        #invoiceGenerate {
+            background-color: #FAFAFA;
+            border: 1px solid #000;
+            border-radius: 5px;
+            padding: 10px 10px;
+            /* display: none; */
+
+            #companyNameMain {
+                border-bottom: 1px solid #000;
+            }
+
+            #descriptionMain {
+                margin-top: 20px;
+                border-bottom: 1px solid #000;
+                padding-bottom: 20px;
+            }
+
+            #yourCompanyName,
+            #billTO,
+            #issuedDate,
+            #dueDate,
+            #itemName,
+            #itemAmt,
+            #discountAmt,
+            #discountMain,
+            #totalAmt,
+            #thankYou {
+                color: rgb(119, 119, 119);
+                font-size: 14px;
+            }
+        }
+
+    }
+}
+
+#settingsPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 95vh;
+    width: 45%;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #000;
+    display: none;
+
+    #title {
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #000;
+        padding-bottom: 30px;
+
+        i {
+            font-weight: 900;
+            font-family: "Font Awesome 6 Pro";
+        }
+
+        #titleLeft {
+            color: #6366F1;
+            padding: 10px 30px;
+            font-weight: 900;
+        }
+
+        #titleRight {
+            padding: 10px 30px;
+            cursor: pointer;
+            width: fit-content;
+        }
+    }
+
+    #themeColor {
+        margin-top: 30px;
+        padding: 10px 30px;
+
+        #title {
+            font-size: 25px;
+            padding-bottom: 0px !important;
+            border-bottom: none !important;
+        }
+
+        .box {
+            border-radius: 10px;
+            height: 120px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #indigo {
+            background-color: #8892F7;
+        }
+
+        #orange {
+            background-color: #FB9E4F;
+        }
+
+        #blue {
+            background-color: #77B0FA;
+        }
+    }
+
+    #currency {
+        padding: 0px 30px;
+        margin-top: 20px;
+
+        #title {
+            font-size: 25px;
+            border-bottom: none !important;
+            padding-bottom: 0px !important;
+        }
+
+        select {
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    }
+
+    #saveSettingsBtn {
+        position: fixed;
+        bottom: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #6366F1;
+        color: #fff;
+        border-radius: 8px;
+        padding: 15px 20px;
+        width: 80%;
+        text-align: center;
+        font-size: 18px;
+        cursor: pointer;
+        border: 1px solid #000;
+
+        i {
+            margin-right: 5px;
+            font-size: 20px !important;
+        }
+
+    }
+}
+
+.bodyScroll {
+    overflow: hidden;
+}
+
+.bodyScroll::-webkit-scrollbar {
+    width: 0px;
+}

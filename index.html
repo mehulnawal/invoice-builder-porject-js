@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Builder</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="./images/favicon.png">
+
+    <!-- Bootstrap css cdn  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome Pro -->
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- Font Family -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- navbar -->
+    <div id="nav" class="shadow">
+        <div class="container">
+            <div id="navBody">
+                <div id="navLeft">
+                    <i class="fa-regular fa-file-lines"></i>
+                    <span>Invoice Generator</span>
+                </div>
+
+                <div id="navRight">
+                    <i class="fa-solid fa-gear" id="settings"></i>
+
+                    <div id="theme">
+                        <i class="fa-regular fa-sun" id="lightTheme"></i>
+                        <i class="fa-solid fa-moon" id="darkTheme"></i>
+                        <span id="themeName">Dark Mode</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- invoice form and invoice preview -->
+    <div id="invoice">
+        <div class="container">
+            <div class="row">
+
+                <!-- invoiceForm -->
+                <div class="col-6">
+                    <div id="invoiceForm" class="shadow">
+                        <div id="title">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Invoice Form
+                        </div>
+
+                        <form action="">
+
+                            <!-- Client -->
+                            <div class="MainDiv">
+                                <label for="formInput">Your Company Name</label>
+                                <div class="mt-2 InputDiv">
+                                    <i class="fa-solid fa-building"></i>
+                                    <input type="text" name="Enter your company Name"
+                                        placeholder="Enter your company name" id="companyInput">
+                                </div>
+                                <span class="text-danger" id="companyError"></span>
+                            </div>
+
+                            <!-- Client -->
+                            <div class="MainDiv mt-3">
+                                <label for="formInput">Client Name</label>
+                                <div class="mt-2 InputDiv">
+                                    <i class="fa-solid fa-user"></i>
+                                    <input type="text" name="Enter Client Name" placeholder="Enter Client Name"
+                                        id="clientInput">
+                                </div>
+                                <span class="text-danger" id="clientError"></span>
+                            </div>
+
+                            <!-- Item description -->
+                            <div class="MainDiv mt-4">
+                                <label for="formInput">Item description</label>
+                                <div class="mt-2 InputDiv">
+                                    <i class="fa-solid fa-tag"></i>
+                                    <input type="text" name="Enter Client Name" placeholder="Enter item description"
+                                        id="descriptionInput">
+                                </div>
+                                <span class="text-danger" id="descriptionError"></span>
+                            </div>
+
+                            <!-- amount -->
+                            <div class="MainDiv mt-4">
+                                <label for="formInput">Amount</label>
+                                <div class="mt-2 InputDiv">
+                                    <i class="fa-solid fa-dollar-sign" id="usDollar"></i>
+                                    <i class="fa-solid fa-indian-rupee-sign" id="IndianRupee"></i>
+                                    <i class="fa-solid fa-euro-sign" id="euro"></i>
+                                    <input type="text" name="Enter Client Name" placeholder="0.00" id="amountInput">
+                                </div>
+                                <span class="text-danger" id="amountError"></span>
+                            </div>
+
+                            <!-- dates -->
+                            <div class="MainDiv mt-4">
+                                <div class="row mt-2 align-items-center">
+
+                                    <!-- issued date -->
+                                    <div class="col-6">
+                                        <div id="issuedDate">
+                                            <label for="formInput">Issued Date</label>
+                                            <div class="DatesDiv">
+                                                <i class="fa-solid fa-calendar-days"></i>
+                                                <input type="date" name="Enter Client Name" id="issuedDateInput">
+                                            </div>
+                                            <span class="text-danger" sid="issuedDateError"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- due date -->
+                                    <div class="col-6">
+                                        <div id="issuedDate">
+                                            <label for="formInput">Due Date</label>
+                                            <div class="DatesDiv">
+                                                <i class="fa-solid fa-calendar-days"></i>
+                                                <input type="date" name="Enter Client Name" id="dueDateInput">
+                                            </div>
+                                            <span class="text-danger" sid="dueDateError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- discounts checkbox -->
+                            <div class="discountsDiv mt-4 d-flex align-items-center gap-3">
+                                <input type="checkbox" name="formInput" id="discountCheckbox" placeholder="0.00"
+                                    class="mb-0">
+
+                                <label for="discountCheckbox" class="mb-0">Do you want to give Discount</label>
+                            </div>
+
+                            <!-- Discount Amt -->
+                            <div class="MainDiv mt-3" id="discountAmt">
+                                <label for="formInput">Discount</label>
+                                <div class="mt-2 InputDiv">
+                                    <i class="fa-solid fa-percent"></i>
+                                    <input type="text" name="" placeholder="0" id="discountAmtInput">
+                                </div>
+                                <span class="text-danger" id="discountAmtError"></span>
+                            </div>
+
+                            <!-- add item btn -->
+                            <button type="button" id="addItemBtn" class="btn w-100">
+                                <i class="fa-regular fa-plus"></i>
+                                Add item
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!-- invoicePreview -->
+                <div class="col-6" class="shadow">
+                    <div id="invoicePreview" class="shadow">
+                        <div id="title" class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <i class="fa-solid fa-file-invoice"></i>
+                                Invoice Preview
+                            </div>
+                            <i class="fa-regular fa-download" id="downloadIcon"></i>
+                        </div>
+
+                        <div id="noInvoice">
+                            There is not Invoice to show. Fill thee form in right to show the Invoice
+                            <i class="fa-regular fa-file-circle-plus"></i>
+                            <i class="fa-regular fa-face-sad-tear"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsPopup" class="shadow-lg">
+        <div id="title">
+            <div id="titleLeft">
+                <i class="fa-regular fa-gears"></i>
+                Settings
+            </div>
+
+            <div id="titleRight">
+                <i class="fa-solid fa-xmark" id="settingsCross"></i>
+            </div>
+        </div>
+
+        <div id="themeColor">
+            <div class="row">
+                <div id="title">Theme Color</div>
+                <div class="col-4">
+                    <div class="box" id="blue">Blue</div>
+                </div>
+
+                <div class="col-4">
+                    <div class="box" id="orange">Orange</div>
+                </div>
+
+                <div class="col-4">
+                    <div class="box" id="indigo">Indigo</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="currency">
+            <div id="title">Currency</div>
+            <select name="" id="" class="form-select">
+                <option value="IndianRupee">Indian Rupees (<i class="fa-regular fa-indian-rupee-sign"></i>)</option>
+                <option value="usDollar">US Dollars ($)</option>
+                <option value="euro">Euro (<i class="fa-solid fa-euro-sign"></i>)</option>
+            </select>
+        </div>
+
+        <div id="saveSettingsBtn">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Save Settings
+        </div>
+
+    </div>
+
+    <!-- custom js file -->
+    <script src="./script.js"></script>
+</body>
+
+</html>
