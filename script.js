@@ -1,7 +1,7 @@
 /*
 The add items validations are not working properly 
-Invoice preview is left
-Toggle and settings are left
+Invoice preview store in sessionStorage and not updating 
+settings 
 */
 // theme toggle
 let theme = document.getElementById("theme");
@@ -238,6 +238,8 @@ let addItemBtn = document.getElementById("addItemBtn");
 let invoiceNumber = 0;
 
 addItemBtn.addEventListener("click", function () {
+    // let invoiceDate = document.getElementById('issuedDateInput');
+    // console.log(invoiceDate.value == '');
 
     if (companyInputCorrect == 0 || clientInputCorrect == 0 || descriptionInputCorrect == 0 || amountInputCorrect == 0 || discountVisible != 0) {
 
@@ -284,8 +286,8 @@ addItemBtn.addEventListener("click", function () {
         sessionStorage.setItem("Description", descriptionInput.value);
         sessionStorage.setItem("Amount", amountInput.value);
         sessionStorage.setItem("Discount Amount", discountAmtInput.value);
-        sessionStorage.setItem("Discount Text", discountText);
-        sessionStorage.setItem("Discount Amount", discountTextAmt);
+        // sessionStorage.setItem("Discount Text", discountText);
+        // sessionStorage.setItem("Discount Amount", discountTextAmt);
         createBill();
     }
 });
@@ -331,8 +333,7 @@ let createBill = function () {
     let discountTextAmt = (discountText == 0) ? 0 : (amount * discountText) / 100;
     let totalAmt = (+amount - discountTextAmt).toFixed(2);
 
-    let billGenerate = `
-    <div>
+    let billGenerate = ` <div>
     <div id="invoiceGenerate" class="mt-4">
                             <div id="companyNameMain">
                                 <span class="fw-bold fs-4">INVOICE</span>
@@ -412,10 +413,10 @@ let createBill = function () {
                             </div>
                            
                             <div id="clearAll">
-                            <button type="button" id="addItemBtn" class="btn w-100 btn-danger mt-5">
-                                <i class="fa-solid fa-trash"></i>
-                                Clear All
-                            </button>
+                            // <button type="button" id="addItemBtn" class="btn w-100 btn-danger mt-5">
+                            //     <i class="fa-solid fa-trash"></i>
+                            //     Clear All
+                            // </button>
                         </div>
                         </div>`;
 
@@ -475,7 +476,7 @@ window.onload = () => {
     }
 
     // getting the bill
-    invoiceNumber = +sessionStorage.getItem("invoiceNumber") || 0;
+    // invoiceNumber = +sessionStorage.getItem("invoiceNumber") || 0;
     if (sessionStorage.getItem("Company Name") !== "") {
         createBill();
     }
