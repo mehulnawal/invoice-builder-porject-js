@@ -1,9 +1,3 @@
-/*
-The add items validations are not working properly 
-Invoice preview store in sessionStorage and not updating 
-settings 
-*/
-// theme toggle
 let theme = document.getElementById("theme");
 let themeName = document.getElementById("themeName");
 let darkTheme = document.getElementById("darkTheme");
@@ -241,7 +235,7 @@ addItemBtn.addEventListener("click", function () {
     // let invoiceDate = document.getElementById('issuedDateInput');
     // console.log(invoiceDate.value == '');
 
-    if (companyInputCorrect == 0 || clientInputCorrect == 0 || descriptionInputCorrect == 0 || amountInputCorrect == 0 || discountVisible != 0) {
+    if (companyInputCorrect == 0 || clientInputCorrect == 0 || descriptionInputCorrect == 0 || amountInputCorrect == 0) {
 
         if (companyInputCorrect == 0) {
             companyError.innerText = "Enter your company name";
@@ -259,15 +253,15 @@ addItemBtn.addEventListener("click", function () {
             amountError.innerText = "Enter amount";
         }
 
-        if (discountVisible != 0) {
+        // if (discountVisible != 0) {
 
-            if (discountCheckboxEnable == 0) {
-                discountAmtError.innerText = "Enter correct discount amount";
-            }
-            else {
-                discountAmtError.innerText = "";
-            }
-        }
+        //     if (discountCheckboxEnable == 0) {
+        //         discountAmtError.innerText = "Enter correct discount amount";
+        //     }
+        //     else {
+        //         discountAmtError.innerText = "";
+        //     }
+        // }
 
         // if (issuedDateCorrect == 0) {
         //     issuedDateError.innerText = "Invalid issue date";
@@ -286,9 +280,12 @@ addItemBtn.addEventListener("click", function () {
         sessionStorage.setItem("Description", descriptionInput.value);
         sessionStorage.setItem("Amount", amountInput.value);
         sessionStorage.setItem("Discount Amount", discountAmtInput.value);
-        // sessionStorage.setItem("Discount Text", discountText);
-        // sessionStorage.setItem("Discount Amount", discountTextAmt);
         createBill();
+        companyInput.value = "";
+        clientInput.value = "";
+        descriptionInput.value = "";
+        amountInput.value = "";
+        discountAmtInput.value = "";
     }
 });
 
@@ -412,11 +409,7 @@ let createBill = function () {
                             <div class="mt-2" id="thankYou">Payment terms : Net 15 days</div>
                             </div>
                            
-                            <div id="clearAll">
-                            // <button type="button" id="addItemBtn" class="btn w-100 btn-danger mt-5">
-                            //     <i class="fa-solid fa-trash"></i>
-                            //     Clear All
-                            // </button>
+                            <div id="clearAll"></div>
                         </div>
                         </div>`;
 
@@ -481,3 +474,76 @@ window.onload = () => {
         createBill();
     }
 }
+
+// settings
+let saveSettingsBtn = document.getElementById("saveSettingsBtn");
+let currencySelect = document.getElementById("currencySelect");
+let IndianRupee = document.getElementById("IndianRupee");
+let usDollar = document.getElementById("usDollar");
+let euro = document.getElementById("euro");
+
+function changeCurrency() {
+    let currencyValue = currencySelect.value;
+
+    if (currencyValue == "IndianRupee") {
+        alert("Currency Changed to Indian Rupees");
+        IndianRupee.style.display = "block";
+        usDollar.style.display = "none";
+        euro.style.display = "none";
+    }
+    else if (currencyValue == "usDollar") {
+        alert("Currency Changed to US Dollar");
+        IndianRupee.style.display = "none";
+        usDollar.style.display = "block";
+        euro.style.display = "none";
+    }
+    else if (currencyValue == "euro") {
+        alert("Currency Changed to Euro");
+        IndianRupee.style.display = "none";
+        usDollar.style.display = "none";
+        euro.style.display = "block";
+    }
+};
+
+let nav = document.getElementById("nav");
+let blue = document.getElementById("blue");
+let orange = document.getElementById("orange");
+let indigo = document.getElementById("indigo");
+
+blue.addEventListener("click", function () {
+    alert("Theme changed to blue");
+    nav.style.background = "#25CEEE";
+    sessionStorage.setItem("Theme", "blue");
+});
+
+orange.addEventListener("click", function () {
+    alert("Theme changed to Orange");
+    nav.style.background = "#FB9E4F";
+    sessionStorage.setItem("Theme", "orange");
+});
+
+indigo.addEventListener("click", function () {
+    alert("Theme changed to Indigo");
+    nav.style.background = "#8892F7";
+    sessionStorage.setItem("Theme", "indigo");
+});
+
+saveSettingsBtn.addEventListener("click", function () {
+    changeCurrency();
+});
+
+// getting currentTheme on page reload;
+function themeFunction() {
+    const currentTheme = sessionStorage.getItem("Theme");
+    if (currentTheme == "blue") {
+        nav.style.background = "#25CEEE";
+    }
+    else if (currentTheme == "orange") {
+        nav.style.background = "#FB9E4F";
+    }
+    else if (currentTheme == "indigo") {
+        nav.style.background = "#8892F7";
+    }
+};
+
+themeFunction();
